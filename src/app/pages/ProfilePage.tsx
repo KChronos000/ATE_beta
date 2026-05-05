@@ -56,7 +56,7 @@ export function ProfilePage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-gray-700 mb-2 flex items-center gap-2">
+              <label className="block text-gray-700 mb-2 items-center gap-2">
                 <User size={16} className="text-orange-500" />
                 Full Name
               </label>
@@ -70,7 +70,7 @@ export function ProfilePage() {
             </div>
 
             <div>
-              <label className="block text-gray-700 mb-2 flex items-center gap-2">
+              <label className="block text-gray-700 mb-2 items-center gap-2">
                 <Mail size={16} className="text-orange-500" />
                 Email
               </label>
@@ -84,7 +84,7 @@ export function ProfilePage() {
             </div>
 
             <div>
-              <label className="block text-gray-700 mb-2 flex items-center gap-2">
+              <label className="block text-gray-700 mb-2 items-center gap-2">
                 <Phone size={16} className="text-orange-500" />
                 Phone Number
               </label>
@@ -98,7 +98,7 @@ export function ProfilePage() {
             </div>
 
             <div>
-              <label className="block text-gray-700 mb-2 flex items-center gap-2">
+              <label className="block text-gray-700 mb-2 items-center gap-2">
                 <MapPin size={16} className="text-orange-500" />
                 Location
               </label>
