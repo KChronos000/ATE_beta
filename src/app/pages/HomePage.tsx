@@ -181,9 +181,9 @@
               );
             })}
 
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full w-16 h-16 flex items-center justify-center shadow-xl z-0">
+            {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full w-16 h-16 flex items-center justify-center shadow-xl z-0">
               <span className="text-white text-xl">🍴</span>
-            </div>
+            </div> */}
           </div>
 
           <div className="mb-4">
