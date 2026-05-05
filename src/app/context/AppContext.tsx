@@ -5,6 +5,8 @@ interface UserPreferences {
   allergies: string[];
   cuisines: string[];
   priceRange: number[];
+  priceMin: number;
+  priceMax: number;
 }
 
 interface User {
@@ -42,7 +44,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const [preferences, setPreferencesState] = useState<UserPreferences>(() => {
     const saved = localStorage.getItem('ate_preferences');
-    return saved ? JSON.parse(saved) : { dietary: [], allergies: [], cuisines: [], priceRange: [1, 3] };
+    return saved ? JSON.parse(saved) : { dietary: [], allergies: [], cuisines: [], priceRange: [1, 3], priceMin: 5, priceMax: 50 };
   });
 
   const [settings, setSettingsState] = useState<AppSettings>(() => {

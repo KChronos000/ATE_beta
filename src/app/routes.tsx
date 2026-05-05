@@ -6,6 +6,7 @@ import { NotificationsPage } from "./pages/NotificationsPage";
 import { SpinWheelPage } from "./pages/SpinWheelPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { RestaurantDetailPage } from "./pages/RestaurantDetailPage";
 import { Layout } from "./components/Layout";
 
 export const router = createBrowserRouter([
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
       { path: "spin", Component: SpinWheelPage },
       { path: "settings", Component: SettingsPage },
       { path: "profile", Component: ProfilePage },
+      { path: "restaurant/:id", Component: RestaurantDetailPage },
     ],
   },
 ]);

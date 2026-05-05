@@ -1,13 +1,19 @@
 import { Star, MapPin, Leaf, Moon, DollarSign } from 'lucide-react';
 import { Restaurant } from '../data/restaurants';
+import { useNavigate } from 'react-router';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
 }
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
+  const navigate = useNavigate();
+
   return (
-    <div className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow border-2 border-orange-100">
+    <button
+      onClick={() => navigate(`/restaurant/${restaurant.id}`)}
+      className="w-full bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow border-2 border-orange-100 text-left"
+    >
       <div className="flex items-start justify-between mb-2">
         <div className="flex-1">
           <h4 className="text-gray-800">{restaurant.name}</h4>
@@ -57,6 +63,6 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
           </div>
         )}
       </div>
-    </div>
+    </button>
   );
 }
