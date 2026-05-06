@@ -1,7 +1,6 @@
 
-  # Untitled
 
-  This is a code bundle for Untitled. The original project is available at https://www.figma.com/design/wKen5oV8vM3ERhbzfWmUyP/Untitled.
+  This is a code bundle for Study lessons. The original project is available at https://www.figma.com/design/wKen5oV8vM3ERhbzfWmUyP/Untitled.
 
   ## Running the code
 
