@@ -86,22 +86,25 @@ export function SpinWheelPage() {
     setIsSpinning(true);
     setSelectedFood(null);
 
+    // Select a random food item
     const randomIndex = Math.floor(Math.random() * foodOptions.length);
     const selectedItem = foodOptions[randomIndex];
 
-    const spins = 5;
+    const spins = 5; // Number of full rotations
     const segmentAngle = 360 / foodOptions.length;
 
-    // Calculate the angle to center the selected segment at the top
-    // We want the CENTER of the segment to align with the pointer at the top
-    const segmentCenter = randomIndex * segmentAngle + (segmentAngle / 2);
+    // Calculate rotation needed to align the selected segment's CENTER with the top pointer
+    // The pointer is at the top (0°/360°)
+    // Each segment's center is at: (index + 0.5) * segmentAngle
+    const targetAngle = (randomIndex + 0.5) * segmentAngle;
 
-    // Total rotation: full spins + rotation to align segment center with top
-    // Subtract segmentCenter because we're rotating the wheel, not the pointer
-    const finalRotation = (spins * 360) + (360 - segmentCenter);
+    // We need to rotate the wheel so the target segment ends up at the top
+    // Since we rotate clockwise, we calculate: multiple spins + offset to reach target
+    const finalRotation = (spins * 360) + (360 - targetAngle);
 
     setRotation(finalRotation);
 
+    // Set the selected food after animation completes
     setTimeout(() => {
       setSelectedFood(selectedItem);
       setIsSpinning(false);
@@ -145,14 +148,16 @@ export function SpinWheelPage() {
         </div>
 
         <div className="relative flex items-center justify-center mb-4">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-3 z-10">
-            <div className="w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[25px] border-t-red-500 drop-shadow-lg"></div>
+          {/* Pointer at the top */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-3 z-20">
+            <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[30px] border-t-red-600 drop-shadow-xl"></div>
           </div>
 
+          {/* Spinning wheel */}
           <motion.div
             animate={{ rotate: rotation }}
-            transition={{ duration: 3, ease: "easeOut" }}
-            className="relative w-72 h-72 rounded-full shadow-2xl border-8 border-white"
+            transition={{ duration: 3, ease: [0.25, 0.1, 0.25, 1] }}
+            className="relative w-80 h-80 rounded-full shadow-2xl border-[10px] border-white"
             style={{
               background: `conic-gradient(
                 from 0deg,
@@ -164,29 +169,33 @@ export function SpinWheelPage() {
               )`
             }}
           >
+            {/* Food emojis positioned on the wheel */}
             {foodOptions.map((food, index) => {
               const segmentAngle = 360 / foodOptions.length;
-              const angle = index * segmentAngle + (segmentAngle / 2);
-              const radian = (angle * Math.PI) / 180;
-              const radius = 95;
+              const centerAngle = (index + 0.5) * segmentAngle; // Center of this segment
+              const radian = ((centerAngle - 90) * Math.PI) / 180; // -90 to start from top
+              const radius = 110; // Distance from center
               const x = Math.cos(radian) * radius;
               const y = Math.sin(radian) * radius;
 
               return (
                 <div
                   key={food.id}
-                  className="absolute top-1/2 left-1/2 flex items-center justify-center pointer-events-none"
+                  className="absolute top-1/2 left-1/2 pointer-events-none"
                   style={{
-                    transform: `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${angle + 90}deg)`,
+                    transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
                   }}
                 >
-                  <span className="text-2xl drop-shadow-lg">{food.emoji}</span>
+                  <div className="bg-white/90 rounded-full p-2 shadow-lg">
+                    <span className="text-3xl">{food.emoji}</span>
+                  </div>
                 </div>
               );
             })}
 
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center border-4 border-orange-500">
-              <Sparkles className="text-orange-500" size={28} />
+            {/* Center circle */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full shadow-xl flex items-center justify-center border-4 border-white z-10">
+              <Sparkles className="text-white" size={32} />
             </div>
           </motion.div>
         </div>
@@ -210,18 +219,23 @@ export function SpinWheelPage() {
           </button>
         </div>
 
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {selectedFood && (
             <motion.div
+              key={selectedFood.id}
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8 }}
+              exit={{ opacity: 0, scale: 0.8, y: -20 }}
+              transition={{ duration: 0.4 }}
               className="space-y-4"
             >
               <div className="bg-white rounded-2xl shadow-2xl p-6 text-center border-4 border-orange-300">
-                <div className="text-5xl mb-3">{selectedFood.emoji}</div>
+                <div className="bg-gradient-to-br from-orange-100 to-pink-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-6xl">{selectedFood.emoji}</span>
+                </div>
                 <h3 className="text-orange-600 mb-1">You should eat...</h3>
-                <h2 className="text-gray-800 mb-3">{selectedFood.name}!</h2>
+                <h2 className="text-gray-800 mb-1">{selectedFood.name}!</h2>
+                <p className="text-sm text-gray-500">{selectedFood.category}</p>
               </div>
 
               {nearbyRestaurants.length > 0 && (
