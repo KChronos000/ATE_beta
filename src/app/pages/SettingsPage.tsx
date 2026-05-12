@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { Bell, MapPin, Moon, Globe, ChevronRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { useLocation } from '../context/LocationContext';
+import { toast } from 'sonner';
 
 export function SettingsPage() {
   const navigate = useNavigate();
   const { settings, setSettings } = useApp();
+  const { userLocation, locationError, isLoadingLocation, requestLocation } = useLocation();
   const [localSettings, setLocalSettings] = useState(settings);
 
   useEffect(() => {
@@ -16,7 +19,23 @@ export function SettingsPage() {
     const newSettings = { ...localSettings, [key]: !localSettings[key] };
     setLocalSettings(newSettings);
     setSettings(newSettings);
+
+    if (key === 'locationServices' && !localSettings[key]) {
+      requestLocation();
+    }
   };
+
+  useEffect(() => {
+    if (locationError) {
+      toast.error('Location Error', {
+        description: locationError,
+      });
+    } else if (userLocation) {
+      toast.success('Location Updated', {
+        description: `Lat: ${userLocation.lat.toFixed(4)}, Lng: ${userLocation.lng.toFixed(4)}`,
+      });
+    }
+  }, [locationError, userLocation]);
 
   const handleDistanceChange = (distance: 'km' | 'mi') => {
     const newSettings = { ...localSettings, distance };
@@ -91,26 +110,38 @@ export function SettingsPage() {
                 </button>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <MapPin className="text-gray-600" size={20} />
-                  <div>
-                    <p className="text-gray-800">Location Services</p>
-                    <p className="text-xs text-gray-500">Find nearby restaurants</p>
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <MapPin className={`${isLoadingLocation ? 'text-orange-500 animate-pulse' : 'text-gray-600'}`} size={20} />
+                    <div>
+                      <p className="text-gray-800">Location Services</p>
+                      <p className="text-xs text-gray-500">
+                        {isLoadingLocation ? 'Getting location...' : userLocation ? `Lat: ${userLocation.lat.toFixed(2)}, Lng: ${userLocation.lng.toFixed(2)}` : 'Find nearby restaurants'}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <button
-                  onClick={() => handleToggle('locationServices')}
-                  className={`relative w-14 h-8 rounded-full transition-colors ${
-                    localSettings.locationServices ? 'bg-orange-500' : 'bg-gray-300'
-                  }`}
-                >
-                  <div
-                    className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-transform ${
-                      localSettings.locationServices ? 'translate-x-7' : 'translate-x-1'
+                  <button
+                    onClick={() => handleToggle('locationServices')}
+                    className={`relative w-14 h-8 rounded-full transition-colors ${
+                      localSettings.locationServices ? 'bg-orange-500' : 'bg-gray-300'
                     }`}
-                  />
-                </button>
+                  >
+                    <div
+                      className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-transform ${
+                        localSettings.locationServices ? 'translate-x-7' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+                {localSettings.locationServices && !userLocation && !isLoadingLocation && (
+                  <button
+                    onClick={requestLocation}
+                    className="w-full text-sm bg-orange-100 text-orange-700 px-3 py-2 rounded-lg hover:bg-orange-200 transition-colors"
+                  >
+                    Enable Location Access
+                  </button>
+                )}
               </div>
 
               <div className="flex items-center justify-between">
@@ -118,13 +149,12 @@ export function SettingsPage() {
                   <Moon className="text-gray-600" size={20} />
                   <div>
                     <p className="text-gray-800">Dark Mode</p>
-                    <p className="text-xs text-gray-500">Coming soon</p>
+                    <p className="text-xs text-gray-500">Toggle dark theme</p>
                   </div>
                 </div>
                 <button
                   onClick={() => handleToggle('darkMode')}
-                  disabled
-                  className={`relative w-14 h-8 rounded-full transition-colors opacity-50 cursor-not-allowed ${
+                  className={`relative w-14 h-8 rounded-full transition-colors ${
                     localSettings.darkMode ? 'bg-orange-500' : 'bg-gray-300'
                   }`}
                 >
