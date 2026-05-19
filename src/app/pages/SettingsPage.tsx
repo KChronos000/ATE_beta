@@ -15,12 +15,20 @@ export function SettingsPage() {
     setLocalSettings(settings);
   }, [settings]);
 
+  useEffect(() => {
+    if (localSettings.darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [localSettings.darkMode]);
+
   const handleToggle = (key: keyof typeof localSettings) => {
     const newSettings = { ...localSettings, [key]: !localSettings[key] };
     setLocalSettings(newSettings);
     setSettings(newSettings);
 
-    if (key === 'locationServices' && !localSettings[key]) {
+    if (key === 'locationServices' && newSettings.locationServices) {
       requestLocation();
     }
   };

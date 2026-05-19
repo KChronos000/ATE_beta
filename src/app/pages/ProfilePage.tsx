@@ -4,8 +4,9 @@ import { User, Mail, Phone, MapPin, Save, LogOut, Camera } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export function ProfilePage() {
+  const { user, setUser, logout, setPreferences } = useApp();
+
   const navigate = useNavigate();
-  const { user, setUser, logout } = useApp();
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [phone, setPhone] = useState(user.phone || '');
@@ -28,6 +29,14 @@ export function ProfilePage() {
   };
 
   const handleLogout = () => {
+    setPreferences({
+      dietary: [],
+      allergies: [],
+      cuisines: [],
+      priceRange: [1, 2, 3],
+      priceMin: 5,
+      priceMax: 50
+    });
     logout();
     navigate('/login');
   };

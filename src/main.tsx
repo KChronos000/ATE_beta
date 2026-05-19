@@ -1,8 +1,5 @@
 import { createRoot } from "react-dom/client";
-import App from "./app/App"; // เอา .tsx ออก
-import "./styles/index.css";
+import App from "./app/App"; 
+import "./styles/index.css"; 
 
-const rootElement = document.getElementById("root");
-if (rootElement) {
-  createRoot(rootElement).render(<App />);
-}
+createRoot(document.getElementById("root")!).render(<App />);
