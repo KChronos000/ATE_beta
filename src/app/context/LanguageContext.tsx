@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-export type Language = 'en' | 'th' | 'es' | 'fr' | 'zh' | 'ja';
+export type Language = 'en' | 'th';
 
 interface Translations {
   [key: string]: {
@@ -323,8 +323,4 @@ export function useLanguage() {
 export const languages: { code: Language; name: string; nativeName: string }[] = [
   { code: 'en', name: 'English', nativeName: 'English' },
   { code: 'th', name: 'Thai', nativeName: 'ไทย' },
-  { code: 'es', name: 'Spanish', nativeName: 'Español' },
-  { code: 'fr', name: 'French', nativeName: 'Français' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文' },
-  { code: 'ja', name: 'Japanese', nativeName: '日本語' },
 ];
